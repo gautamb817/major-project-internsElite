@@ -17,7 +17,7 @@ This portfolio website is a full-stack web application that allows users to:
 ---
 
 ## 🔗 Links
-- **GitHub Repository:** [Add your repo link here]  
+- **GitHub Repository:** [https://github.com/gautamb817/major-project-internsElite]  
 - **Live Frontend (Netlify/Vercel):** [Add frontend URL]  
 - **Live Backend (Render/Heroku):** [Add backend URL]  
 
@@ -76,7 +76,8 @@ The app will run locally on:
 ---
 
 ## 📸 Screenshots
-(Add screenshots of Home, About, Projects, Resume, Contact pages here)
+<img width="2849" height="1501" alt="image" src="https://github.com/user-attachments/assets/bbcaff06-4179-4f6d-acc5-27734e116ca0" />
+
 
 ---
 
@@ -108,8 +109,8 @@ The app will run locally on:
 ---
 
 ## 👨‍💻 Author
-**Your Name**  
-MERN Stack Developer | [Your LinkedIn] | [Your GitHub]
+**Gautam Bhattacharya**  
+MERN Stack Developer
 
 ---
 
