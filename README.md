@@ -107,6 +107,13 @@ The app will run locally on:
 
 ---
 
+🔧 Feature Lists
+- **Dark Mode:** Toggle button added in navbar to change theme between light and dark.  
+  **Dashboard:** Created a live dashboard where message are displayed with name and timestamp.  
+- **JWT Auth:** JWT authentication added .  
+  **.env:** .env file added which has mongodb and jwt auth.  
+
+---
 ## 👨‍💻 Author
 **Gautam Bhattacharya**  
 MERN Stack Developer
