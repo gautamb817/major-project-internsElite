@@ -19,7 +19,7 @@ This portfolio website is a full-stack web application that allows users to:
 ## 🔗 Links
 - **GitHub Repository:** [https://github.com/gautamb817/major-project-internsElite]  
 - **Live Frontend (Netlify/Vercel):** [https://major-project-interns-elite-5bp9.vercel.app/]  
-- **Live Backend (Render/Heroku):** [Add backend URL]  
+- **Live Backend (Render/Heroku):** [https://major-project-internselite.onrender.com/]  
 
 ---
 
