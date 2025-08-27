@@ -12,6 +12,7 @@ export default function Home() {
           Full Stack Developer | MERN Enthusiast
         </p>
       </div>
+      
     </section>
   );
 }
