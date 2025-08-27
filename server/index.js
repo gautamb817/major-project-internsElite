@@ -332,7 +332,8 @@ app.use(express.json());
 // ✅ UPDATED CORS Configuration
 app.use(cors({
   origin: [
-    'https://major-project-interns-elite-5bp9.vercel.app', // Your Vercel frontend
+    'https://major-project-interns-elite-5bp9.vercel.app', // Your original Vercel frontend
+    'https://major-project-interns-elite-5bp9-nqgccc23a.vercel.app', // Your current Vercel frontend
     'http://localhost:3000', // For local development
     'http://localhost:3001'  // Alternative local port
   ],
@@ -414,7 +415,7 @@ app.post("/api/auth/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ name, email, password: hashedPassword });
-    await newMessage.save();
+    await newUser.save();
 
     res.json({ success: true, message: "User registered successfully" });
   } catch (err) {
