@@ -112,10 +112,27 @@ app.get("/api/auth/profile", async (req, res) => {
 });
 
 // ✅ Get all contact messages
-app.get("/api/contact", async (req, res) => {
+app.get("/api/messages", async (req, res) => {
   try {
-    const messages = await Contact.find().sort({ createdAt: -1 }); // latest first
+    const messages = await Contact.find().sort({ createdAt: -1 }); // newest first
     res.json(messages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// DELETE message by ID
+app.delete("/api/messages/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await Contact.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+
+    res.json({ success: true, message: "Message deleted successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
