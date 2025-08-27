@@ -27,7 +27,7 @@ export default function Resume() {
       {/* Download Button */}
       <div className="text-center mb-10">
         <a
-          href="/resume.pdf"
+          href="https://drive.google.com/uc?export=download&id=1f3C_m6AoqRz9C74GEF0-MHqODPDR-O_4"
           download
           className="px-6 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700"
         >
