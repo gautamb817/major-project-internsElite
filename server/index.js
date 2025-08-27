@@ -1,29 +1,26 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 const cors = require("cors");
-require("dotenv").config();
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
+const Contact = require("./models/Contact"); // if you already have Contact.js
+const User = require("./models/User");
+
+dotenv.config();
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-// MongoDB connection
+// ✅ MongoDB connection
 mongoose
-  .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(process.env.MONGO_URI, {})
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Schema + Model
-const contactSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  message: String,
-  timestamp: { type: Date, default: Date.now },
-});
-contactSchema.index({ email: 1, message: 1 }, { unique: true });
-const Contact = mongoose.model("Contact", contactSchema);
-
-// API route
+// ========== CONTACT ROUTE ==========
 app.post("/api/contact", async (req, res) => {
   try {
     const { name, email, message } = req.body;
@@ -32,25 +29,90 @@ app.post("/api/contact", async (req, res) => {
       return res.status(400).json({ error: "All fields are required" });
     }
 
+    // Duplicate prevention
+    const existing = await Contact.findOne({ email, message });
+    if (existing) {
+      return res.status(400).json({ error: "Duplicate message detected" });
+    }
+
     const newMessage = new Contact({ name, email, message });
     await newMessage.save();
 
     res.json({ success: true, message: "Message saved!" });
   } catch (err) {
-    if (err.code === 11000) {
-      return res.status(400).json({ error: "Duplicate message detected" });
-    }
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
+// ========== AUTH ROUTES ==========
+const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
-// Default route
-app.get("/", (req, res) => {
-  res.send("Portfolio Backend Running 🚀");
+// Register
+app.post("/api/auth/register", async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const existing = await User.findOne({ email });
+    if (existing) return res.status(400).json({ error: "User already exists" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ name, email, password: hashedPassword });
+    await newUser.save();
+
+    res.json({ success: true, message: "User registered successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
 
+// Login
+app.post("/api/auth/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ error: "Invalid credentials" });
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+
+    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
+
+    res.json({ success: true, token });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// Protected route (profile)
+app.get("/api/auth/profile", async (req, res) => {
+  try {
+    const token = req.headers["authorization"]?.split(" ")[1];
+    if (!token) return res.status(401).json({ error: "No token provided" });
+
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(401).json({ error: "Invalid or expired token" });
+  }
+});
+
+// ========== START SERVER ==========
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`✅ Server running on http://localhost:${PORT}`)
+);
