@@ -74,7 +74,7 @@ import API_URL from '../config/api.js';
 // Then use: fetch(`${API_URL}/api/contact`)
 // API configuration
 //const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
+console.log('API_URL:', API_URL); 
 export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState("");
