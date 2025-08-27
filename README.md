@@ -91,9 +91,8 @@ The app will run locally on:
 - Resume download option  
 - Live deployment of both frontend and backend  
 
-### ⭐ Bonus Features (if implemented)
+### ⭐ Bonus Features 
 - Dark/Light mode toggle  
-- Framer Motion animations  
 - Admin dashboard for messages  
 - JWT authentication  
 
