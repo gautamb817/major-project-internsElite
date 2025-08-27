@@ -111,6 +111,18 @@ app.get("/api/auth/profile", async (req, res) => {
   }
 });
 
+// ✅ Get all contact messages
+app.get("/api/contact", async (req, res) => {
+  try {
+    const messages = await Contact.find().sort({ createdAt: -1 }); // latest first
+    res.json(messages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+
 // ========== START SERVER ==========
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () =>
