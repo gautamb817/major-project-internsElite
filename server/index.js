@@ -20,13 +20,14 @@ const contactSchema = new mongoose.Schema({
   message: String,
   timestamp: { type: Date, default: Date.now },
 });
-
+contactSchema.index({ email: 1, message: 1 }, { unique: true });
 const Contact = mongoose.model("Contact", contactSchema);
 
 // API route
 app.post("/api/contact", async (req, res) => {
   try {
     const { name, email, message } = req.body;
+
     if (!name || !email || !message) {
       return res.status(400).json({ error: "All fields are required" });
     }
@@ -36,10 +37,14 @@ app.post("/api/contact", async (req, res) => {
 
     res.json({ success: true, message: "Message saved!" });
   } catch (err) {
+    if (err.code === 11000) {
+      return res.status(400).json({ error: "Duplicate message detected" });
+    }
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
+
 
 // Default route
 app.get("/", (req, res) => {
